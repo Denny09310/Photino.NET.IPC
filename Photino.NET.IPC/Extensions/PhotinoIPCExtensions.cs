@@ -1,7 +1,8 @@
 
 using Microsoft.Extensions.DependencyInjection;
+using Photino.NET.IPC;
 
-namespace Photino.NET.IPC.Extensions;
+namespace Photino.NET.Extensions;
 
 public static class PhotinoIPCExtensions
 {
