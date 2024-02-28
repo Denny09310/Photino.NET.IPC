@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.NET", "..\Photino.NET\Photino.NET\Photino.NET.csproj", "{F8FEDEED-BF45-4550-8162-E45E1DFE0C98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.NET.IPC", "Photino.NET.IPC\Photino.NET.IPC.csproj", "{52110AFB-51FD-496A-B272-66D21C24D0AB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3C7D95B3-E195-4CD7-AEA9-9821A436BA7E}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,10 +17,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F8FEDEED-BF45-4550-8162-E45E1DFE0C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8FEDEED-BF45-4550-8162-E45E1DFE0C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8FEDEED-BF45-4550-8162-E45E1DFE0C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8FEDEED-BF45-4550-8162-E45E1DFE0C98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52110AFB-51FD-496A-B272-66D21C24D0AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52110AFB-51FD-496A-B272-66D21C24D0AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52110AFB-51FD-496A-B272-66D21C24D0AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52110AFB-51FD-496A-B272-66D21C24D0AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
