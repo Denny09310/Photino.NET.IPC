@@ -4,14 +4,11 @@ using Photino.NET.IPC;
 
 namespace Photino.NET.Extensions;
 
-public static class PhotinoIPCExtensions
+public static class PhotinoExtensions
 {
-    public static IServiceCollection AddIPC(this IServiceCollection services) =>
-        services.AddSingleton(PhotinoIPCService.Instance);
-
-    public static PhotinoWindow RegisterChannelHandler<T>(this PhotinoWindow window, string key, PhotinoIPCService.IPCEventHandler<T> handler) where T : class
+    public static PhotinoWindow RegisterChannelHandler<T>(this PhotinoWindow window, string key, IPCEventHandler<T> handler) where T : class
     {
-        var ipc = PhotinoIPCService.Instance;
+        var ipc = PhotinoInterProcessCommunication.Instance;
 
         ipc.Channels.TryAdd(key, new PhotinoChannel(window, key));
 
@@ -29,7 +26,7 @@ public static class PhotinoIPCExtensions
 
     public static void SendMessage<T>(this PhotinoWindow window, string key, T message) where T : class
     {
-        PhotinoIPCService.Instance.ValidateChannelKey(key);
+        PhotinoInterProcessCommunication.Instance.ValidateChannelKey(key);
         window.SendWebMessage(PhotinoPayload<T>.ToJson(message));
     }
 }
