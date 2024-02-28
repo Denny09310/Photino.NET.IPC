@@ -11,15 +11,15 @@ public class PhotinoPayload<T>(string key, T? data) where T : class
         WriteIndented = true
     };
 
+    private static PhotinoPayload<T> Empty => new(string.Empty, null);
+
+    public static PhotinoPayload<T>? FromJson(string json) => JsonSerializer.Deserialize<PhotinoPayload<T>>(json, DEFAULT_OPTIONS);
+
     [JsonPropertyName("data")]
     public T? Data { get; init; } = data;
 
     [JsonPropertyName("key")]
     public string Key { get; init; } = key;
-
-    private static PhotinoPayload<T> Empty => new(string.Empty, null);
-
-    public static PhotinoPayload<T>? FromJson(string json) => JsonSerializer.Deserialize<PhotinoPayload<T>>(json, DEFAULT_OPTIONS);
 
     public static string ToJson(T payload) => JsonSerializer.Serialize(payload, DEFAULT_OPTIONS);
 
@@ -32,7 +32,7 @@ public class PhotinoPayload<T>(string key, T? data) where T : class
         }
         catch
         {
-            payload = PhotinoPayload<T>.Empty;
+            payload = Empty;
             return false;
         }
     }
