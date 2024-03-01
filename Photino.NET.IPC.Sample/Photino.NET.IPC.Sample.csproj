@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Photino.NET.IPC\Photino.NET.IPC.csproj" />
+    <ProjectReference Include="..\..\Photino.NET\Photino.NET\Photino.NET.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="wwwroot\**" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+</Project>
