@@ -2,26 +2,46 @@ using System.Text.Json;
 
 namespace Photino.NET.IPC;
 
-// Channel Class
-public class Channel<T>(PhotinoWindow window, string name) : IChannel
+/// <summary>
+/// Represents a communication channel with specific message data type.
+/// </summary>
+/// <typeparam name="TRequest">The type of request message data.</typeparam>
+/// <remarks>
+/// Initializes a new instance of the Channel class.
+/// </remarks>
+/// <param name="name">The name of the channel.</param>
+public class Channel<TRequest>(string name) : IChannel
 {
-    public event EventHandler<MessageEventArgs<T>>? MessageReceived;
+    private PhotinoWindow? window;
 
+    /// <inheritdoc />
     public string Name { get; private set; } = name;
-    public PhotinoWindow Window { get; set; } = window;
 
-    public void SendMessageToRenderer(Message<T> message)
+    /// <summary>
+    /// Event triggered when a message is received on the channel.
+    /// </summary>
+    public event EventHandler<MessageEventArgs<TRequest>>? MessageReceived;
+
+    /// <summary>
+    /// Sends a response to the renderer.
+    /// </summary>
+    /// <typeparam name="TResponse">The type of response message data.</typeparam>
+    /// <param name="response">The response data.</param>
+    public void Emit<TResponse>(TResponse response)
     {
-        var response = JsonSerializer.Serialize(message);
-        Window.SendWebMessage(response);
+        var message = new Message<TResponse> { Key = Name, Data = response };
+        SendMessageToRenderer(message);
     }
 
+    /// <inheritdoc />
     public void ReceiveMessageFromRenderer(object? sender, string message)
     {
-        if (sender is not PhotinoWindow window) return;
+        if (sender is not PhotinoWindow) return;
+
+        window = (PhotinoWindow)sender;
 
         // Parse the incoming message
-        var receivedMessage = JsonSerializer.Deserialize<Message<T>>(message);
+        var receivedMessage = JsonSerializer.Deserialize<Message<TRequest>>(message);
 
         // Check if the message type matches the channel name
         if (receivedMessage?.Key == Name)
@@ -31,8 +51,18 @@ public class Channel<T>(PhotinoWindow window, string name) : IChannel
         }
     }
 
-    protected virtual void OnMessageReceived(Message<T> message)
+    /// <summary>
+    /// Raises the MessageReceived event.
+    /// </summary>
+    /// <param name="message">The received message.</param>
+    protected virtual void OnMessageReceived(Message<TRequest> message)
     {
-        MessageReceived?.Invoke(this, new MessageEventArgs<T>(message));
+        MessageReceived?.Invoke(this, new MessageEventArgs<TRequest>(message));
+    }
+
+    private void SendMessageToRenderer<TResponse>(Message<TResponse> message)
+    {
+        var response = JsonSerializer.Serialize(message);
+        window?.SendWebMessage(response);
     }
 }

@@ -1,25 +1,39 @@
 namespace Photino.NET.IPC;
 
-// Channel Manager Class
+/// <summary>
+/// Manages communication channels.
+/// </summary>
 public class ChannelManager : IChannelManager
 {
+    /// <summary>
+    /// Gets the singleton instance of the ChannelManager.
+    /// </summary>
     public static readonly ChannelManager Instance = new();
 
     private readonly Dictionary<string, IChannel> channels = [];
 
-    public void CreateChannel<T>(PhotinoWindow window, string channelName, ChannelMessageHandler<T> handler)
+    /// <inheritdoc />
+    public void CreateChannel<T>(string channelName, ChannelMessageHandler<T> handler)
     {
         if (!channels.ContainsKey(channelName))
         {
-            var newChannel = new Channel<T>(window, channelName);
-            newChannel.MessageReceived += (_, e) => HandleMessage(e, handler);
+            var newChannel = new Channel<T>(channelName);
+            newChannel.MessageReceived += (s, e) => HandleMessage(e, handler);
             channels.Add(channelName, newChannel);
         }
     }
 
-    public IChannel? GetChannel<T>(string channelName)
+    /// <inheritdoc />
+    public Channel<T> GetChannel<T>(string channelName)
     {
-        return channels.TryGetValue(channelName, out var channel) ? channel : null;
+        var channel = channels.TryGetValue(channelName, out var value) ? value : null;
+
+        if (channel is Channel<T> result)
+        {
+            return result;
+        }
+
+        throw new InvalidCastException($"Cannot cast IChannel to Channel<{typeof(T)}>");
     }
 
     private void HandleMessage<T>(MessageEventArgs<T> e, ChannelMessageHandler<T> handler)

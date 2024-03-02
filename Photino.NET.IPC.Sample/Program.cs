@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Photino.NET;
+﻿using Photino.NET;
 using Photino.NET.IPC;
 
 internal class Program
@@ -14,20 +13,12 @@ internal class Program
             .SetUseOsDefaultSize(false)
             .SetSize(2000, 1500)
             .Center()
-            // Most event handlers can be registered after the
-            // PhotinoWindow was instantiated by calling a registration 
-            // method like the following RegisterWebMessageReceivedHandler.
-            // This could be added in the PhotinoWindowOptions if preferred.
-            .RegisterChannel<string>("test-channel", (sender, e) =>
+            .RegisterChannel<string>("channel-with-response-of-same-type", (sender, e) =>
             {
                 Console.WriteLine(e.Data);
-                sender.SendMessageToRenderer(e);
+                sender.Emit("Hello, Javascript 🚀!");
             })
             .Load("wwwroot/index.html");
-
-        // You can add multiple handlers to the same channel
-        var channel = ChannelManager.Instance.GetChannel<string>("test-channel").Parse<string>();
-        channel.MessageReceived += (s, e) => Console.WriteLine("Message received from second handler: {0}", e.Message.Data);
 
         window.WaitForClose();
     }
