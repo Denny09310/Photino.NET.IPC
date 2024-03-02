@@ -26,7 +26,7 @@ internal class Program
             .Load("wwwroot/index.html");
 
         // You can add multiple handlers to the same channel
-        var channel = InterProcessCommunication.Instance.GetChannel<string>("test-channel").Parse<string>();
+        var channel = ChannelManager.Instance.GetChannel<string>("test-channel").Parse<string>();
         channel.MessageReceived += (s, e) => Console.WriteLine("Message received from second handler: {0}", e.Message.Data);
 
         window.WaitForClose();

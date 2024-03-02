@@ -1,9 +1,9 @@
 namespace Photino.NET.IPC;
 
 // Channel Manager Class
-public class InterProcessCommunication
+public class ChannelManager : IChannelManager
 {
-    public static readonly InterProcessCommunication Instance = new();
+    public static readonly ChannelManager Instance = new();
 
     private readonly Dictionary<string, IChannel> channels = [];
 
@@ -12,7 +12,7 @@ public class InterProcessCommunication
         if (!channels.ContainsKey(channelName))
         {
             var newChannel = new Channel<T>(window, channelName);
-            newChannel.MessageReceived += (s, e) => HandleMessage(s, e, handler); // Subscribe to the channel's messages
+            newChannel.MessageReceived += (_, e) => HandleMessage(e, handler);
             channels.Add(channelName, newChannel);
         }
     }
@@ -22,7 +22,7 @@ public class InterProcessCommunication
         return channels.TryGetValue(channelName, out var channel) ? channel : null;
     }
 
-    private void HandleMessage<T>(object? sender, MessageEventArgs<T> e, ChannelMessageHandler<T> handler)
+    private void HandleMessage<T>(MessageEventArgs<T> e, ChannelMessageHandler<T> handler)
     {
         if (e.Message.Key is string channelName)
         {
