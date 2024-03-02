@@ -16,7 +16,7 @@ internal class Program
             .RegisterChannel<string>("channel-with-response-of-same-type", (sender, e) =>
             {
                 Console.WriteLine(e.Data);
-                sender.Emit("Hello, Javascript 🚀!");
+                sender.Emit("Hello Javascript 🚀!");
             })
             .Load("wwwroot/index.html");
 
