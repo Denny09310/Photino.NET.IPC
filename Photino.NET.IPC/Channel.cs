@@ -22,19 +22,15 @@ public class Channel<TRequest>(string name) : IChannel
     /// </summary>
     public event EventHandler<MessageEventArgs<TRequest>>? MessageReceived;
 
-    /// <summary>
-    /// Sends a response to the renderer.
-    /// </summary>
-    /// <typeparam name="TResponse">The type of response message data.</typeparam>
-    /// <param name="response">The response data.</param>
+    /// <inheritdoc />
     public void Emit<TResponse>(TResponse response)
     {
         var message = new Message<TResponse> { Key = Name, Data = response };
-        SendMessageToRenderer(message);
+        SendMessage(message);
     }
 
     /// <inheritdoc />
-    public void ReceiveMessageFromRenderer(object? sender, string message)
+    public void ReceiveMessage(object? sender, string message)
     {
         if (sender is not PhotinoWindow) return;
 
@@ -74,7 +70,7 @@ public class Channel<TRequest>(string name) : IChannel
         handler.Invoke(this, e.Message);
     }
 
-    private void SendMessageToRenderer<TResponse>(Message<TResponse> message)
+    private void SendMessage<TResponse>(Message<TResponse> message)
     {
         var response = JsonSerializer.Serialize(message);
         window?.SendWebMessage(response);
