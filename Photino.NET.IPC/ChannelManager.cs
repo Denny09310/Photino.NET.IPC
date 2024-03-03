@@ -17,9 +17,10 @@ public class ChannelManager : IChannelManager
     {
         if (!channels.ContainsKey(channelName))
         {
-            var newChannel = new Channel<T>(channelName);
-            newChannel.MessageReceived += (s, e) => HandleMessage(e, handler);
-            channels.Add(channelName, newChannel);
+            var channel = new Channel<T>(channelName);
+            channel.RegisterMessageHandler(handler);
+
+            channels.Add(channelName, channel);
         }
     }
 
@@ -34,18 +35,5 @@ public class ChannelManager : IChannelManager
         }
 
         throw new InvalidCastException($"Cannot cast IChannel to Channel<{typeof(T)}>");
-    }
-
-    private void HandleMessage<T>(MessageEventArgs<T> e, ChannelMessageHandler<T> handler)
-    {
-        if (e.Message.Key is string channelName)
-        {
-            var channel = GetChannel<T>(channelName);
-
-            if (channel is Channel<T> typedChannel)
-            {
-                handler.Invoke(typedChannel, e.Message);
-            }
-        }
     }
 }

@@ -60,6 +60,20 @@ public class Channel<TRequest>(string name) : IChannel
         MessageReceived?.Invoke(this, new MessageEventArgs<TRequest>(message));
     }
 
+    /// <summary>
+    /// Registers a message handler for the channel.
+    /// </summary>
+    /// <param name="handler">The message handler to register.</param>
+    public void RegisterMessageHandler(ChannelMessageHandler<TRequest> handler)
+    {
+        MessageReceived += (s, e) => HandleMessage(e, handler);
+    }
+
+    private void HandleMessage(MessageEventArgs<TRequest> e, ChannelMessageHandler<TRequest> handler)
+    {
+        handler.Invoke(this, e.Message);
+    }
+
     private void SendMessageToRenderer<TResponse>(Message<TResponse> message)
     {
         var response = JsonSerializer.Serialize(message);
