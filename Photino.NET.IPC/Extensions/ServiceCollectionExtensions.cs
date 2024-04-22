@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Photino.NET.IPC;
 
@@ -12,8 +13,20 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The IServiceCollection instance.</param>
     /// <returns>The updated IServiceCollection instance.</returns>
-    public static IServiceCollection AddInterProcessCommunication(this IServiceCollection services)
+    public static IServiceCollection AddInterProcessCommunication(this IServiceCollection services, params Assembly[] assemblies)
     {
-        return services.AddSingleton<IChannelManager>(ChannelManager.Instance);
+        var descriptors = assemblies.SelectMany(assembly => assembly.DefinedTypes)
+            .Where(type => !type.IsInterface && typeof(IChannelDescriptor).IsAssignableFrom(type))
+            .Select(Activator.CreateInstance)
+            .Cast<IChannelDescriptor>();
+
+        foreach (var descriptor in descriptors)
+        {
+            descriptor.RegisterChannelServices(services);
+            ChannelDescriptors.Instance.AddDescriptor(descriptor);
+        }
+
+        return services.AddSingleton<IChannelManager>(ChannelManager.Instance)
+                       .AddSingleton<IChannelDescriptors>(ChannelDescriptors.Instance);
     }
 }

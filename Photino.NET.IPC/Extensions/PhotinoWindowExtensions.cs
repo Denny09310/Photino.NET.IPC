@@ -1,4 +1,6 @@
-﻿namespace Photino.NET.IPC;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Photino.NET.IPC;
 
 /// <summary>
 /// Extension methods for PhotinoWindow related to inter-process communication.
@@ -27,5 +29,17 @@ public static class PhotinoWindowExtensions
                 channel.ReceiveMessage(sender, message);
             }
         });
+    }
+
+    public static PhotinoWindow RegisterDescriptors(this PhotinoWindow window)
+    {
+        var descriptors = ChannelDescriptors.Instance.GetDescriptors();
+
+        foreach (var descriptor in descriptors)
+        {
+            descriptor.RegisterChannel(window);
+        }
+
+        return window;
     }
 }
