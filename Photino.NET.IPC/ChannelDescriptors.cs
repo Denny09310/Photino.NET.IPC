@@ -1,9 +1,9 @@
 ﻿
 namespace Photino.NET.IPC;
 
-public class ChannelDescriptors : IChannelDescriptors
+public class ChannelDescriptorCollection : IChannelDescriptorCollection
 {
-    public static readonly ChannelDescriptors Instance = new();
+    public static readonly ChannelDescriptorCollection Instance = new();
 
     private readonly List<IChannelDescriptor> _descriptors = [];
 

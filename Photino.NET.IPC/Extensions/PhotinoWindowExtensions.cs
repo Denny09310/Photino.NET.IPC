@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Photino.NET.IPC;
+﻿namespace Photino.NET.IPC;
 
 /// <summary>
 /// Extension methods for PhotinoWindow related to inter-process communication.
@@ -17,7 +15,7 @@ public static class PhotinoWindowExtensions
     /// <returns>The updated PhotinoWindow instance.</returns>
     public static PhotinoWindow RegisterChannel<T>(this PhotinoWindow window, string name, ChannelMessageHandler<T> handler)
     {
-        ChannelManager.Instance.CreateChannel<T>(name, handler);
+        ChannelManager.Instance.CreateChannel(name, handler);
 
         // Register the handler for messages from the renderer
         return window.RegisterWebMessageReceivedHandler((sender, message) =>
@@ -31,9 +29,9 @@ public static class PhotinoWindowExtensions
         });
     }
 
-    public static PhotinoWindow RegisterDescriptors(this PhotinoWindow window)
+    public static PhotinoWindow RegisterInterProcessCommunication(this PhotinoWindow window)
     {
-        var descriptors = ChannelDescriptors.Instance.GetDescriptors();
+        var descriptors = ChannelDescriptorCollection.Instance.GetDescriptors();
 
         foreach (var descriptor in descriptors)
         {

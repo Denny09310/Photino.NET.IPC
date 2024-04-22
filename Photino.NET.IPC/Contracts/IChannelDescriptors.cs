@@ -1,6 +1,6 @@
 ﻿namespace Photino.NET.IPC;
 
-public interface IChannelDescriptors
+public interface IChannelDescriptorCollection
 {
     void AddDescriptor(IChannelDescriptor descriptor);
     IReadOnlyCollection<IChannelDescriptor> GetDescriptors();
